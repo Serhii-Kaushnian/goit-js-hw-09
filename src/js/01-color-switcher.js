@@ -9,10 +9,14 @@ function changeBodyColor() {
   document.body.style.backgroundColor = getRandomHexColor();
 }
 startButtonRef.addEventListener('click', () => {
-  timerId = setInterval(changeBodyColor, 1000);
+  timerId = setInterval(changeBodyColor, 2000);
   document.querySelector('[data-start]').disabled = true;
-});
-stopButtonRef.addEventListener('click', () => {
-  clearInterval(timerId);
-  document.querySelector('[data-start]').disabled = false;
+  stopButtonRef.addEventListener(
+    'click',
+    () => {
+      clearInterval(timerId);
+      document.querySelector('[data-start]').disabled = false;
+    },
+    { once: true }
+  );
 });
