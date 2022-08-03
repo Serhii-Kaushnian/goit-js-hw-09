@@ -9,7 +9,7 @@ function changeBodyColor() {
   document.body.style.backgroundColor = getRandomHexColor();
 }
 startButtonRef.addEventListener('click', () => {
-  timerId = setInterval(changeBodyColor, 2000);
+  timerId = setInterval(changeBodyColor, 1000);
   document.querySelector('[data-start]').disabled = true;
   stopButtonRef.addEventListener(
     'click',
