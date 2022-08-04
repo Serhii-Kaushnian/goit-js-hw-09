@@ -31,6 +31,7 @@ const options = {
     if (deltaTime <= 0) {
       alertMessage();
     } else if (deltaTime > 0) {
+      globalCounter = 0;
       intervalIdForStartFromCurrentTime = setInterval(
         startFromCurrentTime,
         1000
@@ -84,5 +85,4 @@ function startCounting() {
 
 function startFromCurrentTime() {
   globalCounter -= 1000;
-  console.log('globalCounter: ', globalCounter);
 }
