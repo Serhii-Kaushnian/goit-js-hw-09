@@ -10,8 +10,11 @@ const minutesSpanRef = document.querySelector('[data-minutes]');
 const secondsSpanRef = document.querySelector('[data-seconds]');
 
 startButtonRef.disabled = true;
-let intervalId;
+
+let intervalIdForSetInterval;
+let intervalIdForStartFromCurrentTime;
 let deltaTime;
+let globalCounter = 0;
 
 const currentTime = new Date();
 const options = {
@@ -23,10 +26,15 @@ const options = {
     if (!selectedDates[0]) {
       return;
     }
-    deltaTime = selectedDates[0] - currentTime;
+
+    deltaTime = selectedDates[0] - Date.now();
     if (deltaTime <= 0) {
       alertMessage();
     } else if (deltaTime > 0) {
+      intervalIdForStartFromCurrentTime = setInterval(
+        startFromCurrentTime,
+        1000
+      );
       Notiflix.Notify.success('Now You can start Coundown');
       startButtonRef.disabled = false;
       dateInput.disabled = true;
@@ -54,18 +62,27 @@ function basicMarkUp(deltaTime) {
 }
 
 startButtonRef.addEventListener('click', () => {
-  intervalId = setInterval(startCounting, 1000);
+  clearInterval(intervalIdForStartFromCurrentTime);
+  deltaTime = deltaTime + globalCounter;
+  intervalIdForSetInterval = setInterval(startCounting, 1000);
 });
 
 function startCounting() {
   startButtonRef.disabled = true;
+
   if (deltaTime < 2000) {
+    Notiflix.Notify.success('Your Coundown fihished');
     dateInput.disabled = false;
-    clearInterval(intervalId);
+    clearInterval(intervalIdForSetInterval);
     basicMarkUp(deltaTime);
-    timerDivRef.style.backgroundColor = 'green';
   }
+
   deltaTime = deltaTime - 1000;
 
   basicMarkUp(deltaTime);
+}
+
+function startFromCurrentTime() {
+  globalCounter -= 1000;
+  console.log('globalCounter: ', globalCounter);
 }
