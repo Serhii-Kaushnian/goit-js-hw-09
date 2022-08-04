@@ -11,7 +11,7 @@ function changeBodyColor() {
 function removeEventListenerFromButtonStop() {
   clearInterval(timerId);
   document.querySelector('[data-start]').disabled = false;
-  stopButtonRef.removeEventListener(removeEventListenerFromButtonStop);
+  stopButtonRef.removeEventListener('click', removeEventListenerFromButtonStop);
 }
 startButtonRef.addEventListener('click', () => {
   timerId = setInterval(changeBodyColor, 1000);
