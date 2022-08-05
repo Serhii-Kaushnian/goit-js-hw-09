@@ -7,8 +7,12 @@ const refs = {
   secondDelayInput: document.querySelector('[name="step"]'),
   amountOfDelays: document.querySelector('[name="amount"]'),
 };
+
 //------------------------------------------------------------
-let promiseCounter = 1;
+refs.firstDelayInput.step = '500';
+refs.secondDelayInput.step = '500';
+//------------------------------------------------------------
+let promiseCounter;
 let firstIntervalId;
 let secondDelayIntervalId;
 //------------------------------------------------------------
@@ -21,26 +25,28 @@ function onFormSubmit(event) {
   firstIntervalId = setInterval(
     () => {
       createPromise(refs.firstDelayInput.value);
-      secondDelayIntervalId = setInterval(
-        () => {
-          secondDelayHandler(
-            refs.amountOfDelays.value,
-            refs.secondDelayInput.value
-          );
-        },
-        refs.secondDelayInput.value,
-        refs.amountOfDelays.value,
-        refs.secondDelayInput.value
-      );
+
+      clearInterval(firstIntervalId);
+
+      if (refs.amountOfDelays.value > 1) {
+        secondDelayIntervalId = setInterval(
+          () => {
+            secondDelayHandler(refs.secondDelayInput.value);
+          },
+          refs.secondDelayInput.value,
+          refs.secondDelayInput.value
+        );
+      } else if (refs.amountOfDelays.value == 1) {
+        refs.submitButtonRef.disabled = false;
+      }
     },
     refs.firstDelayInput.value,
-    refs.amountOfDelays.value,
     refs.firstDelayInput.value
   );
 }
 //------------------------------------------------------------
-function secondDelayHandler(position, delay) {
-  clearInterval(firstIntervalId);
+function secondDelayHandler(delay) {
+  console.log(promiseCounter);
   if (promiseCounter == refs.amountOfDelays.value) {
     clearInterval(secondDelayIntervalId);
     refs.formRef.reset();
