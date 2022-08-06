@@ -7,12 +7,15 @@ const refs = {
   secondDelayInput: document.querySelector('[name="step"]'),
   amountOfDelays: document.querySelector('[name="amount"]'),
 };
-
+//------------------------------------------------------------
+refs.secondDelayInput.value = '0';
+refs.firstDelayInput.value = '0';
 //------------------------------------------------------------
 refs.firstDelayInput.step = '500';
 refs.secondDelayInput.step = '500';
 //------------------------------------------------------------
 let promiseCounter;
+let secondDelayInputCounter = 0;
 let firstIntervalId;
 let secondDelayIntervalId;
 //------------------------------------------------------------
@@ -22,6 +25,7 @@ function onFormSubmit(event) {
   event.preventDefault();
   refs.submitButtonRef.disabled = true;
   promiseCounter = 1;
+  secondDelayInputCounter;
   firstIntervalId = setInterval(
     () => {
       createPromise(refs.firstDelayInput.value);
@@ -29,9 +33,16 @@ function onFormSubmit(event) {
       clearInterval(firstIntervalId);
 
       if (refs.amountOfDelays.value > 1) {
+        secondDelayInputCounter = Number(refs.secondDelayInput.value);
         secondDelayIntervalId = setInterval(
           () => {
-            secondDelayHandler(refs.secondDelayInput.value);
+            if (refs.secondDelayInput.value == 0) {
+              secondDelayHandler(refs.firstDelayInput.value);
+            } else if (refs.secondDelayInput.value > 0) {
+              secondDelayHandler(
+                Number(refs.firstDelayInput.value) + secondDelayInputCounter
+              );
+            }
           },
           refs.secondDelayInput.value,
           refs.secondDelayInput.value
@@ -46,7 +57,6 @@ function onFormSubmit(event) {
 }
 //------------------------------------------------------------
 function secondDelayHandler(delay) {
-  console.log(promiseCounter);
   if (promiseCounter == refs.amountOfDelays.value) {
     clearInterval(secondDelayIntervalId);
     refs.formRef.reset();
@@ -64,6 +74,7 @@ function createPromise(delay) {
   } else {
     Notiflix.Notify.failure(`Rejected promise ${promiseCounter} in ${delay}ms`);
   }
+  secondDelayInputCounter += Number(refs.secondDelayInput.value);
   promiseCounter += 1;
 }
 //------------------------------------------------------------
